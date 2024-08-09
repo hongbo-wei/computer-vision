@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Upload and Inference</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+    <div style="display: flex; flex-direction: row; justify-content: space-around;">
+        <div style="flex: 1; text-align: center;">
+            <h2>Upload Image</h2>
+            <input type="file" id="imageUpload" accept="image/*">
+            <br>
+            <img id="uploadedImage" src="#" alt="Uploaded Image" style="max-width: 100%; display: none;">
+        </div>
+        <div style="flex: 1; text-align: center;">
+            <h2>Classified Image</h2>
+            <button id="runInference">Run Inference</button>
+            <br>
+            <img id="classifiedImage" src="#" alt="Classified Image" style="max-width: 100%; display: none;">
+        </div>
+    </div>
+
+    <script>
+        $('#imageUpload').change(function() {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                $('#uploadedImage').attr('src', e.target.result);
+                $('#uploadedImage').show();
+            }
+            reader.readAsDataURL(this.files[0]);
+        });
+
+        $('#runInference').click(function() {
+            var formData = new FormData();
+            formData.append('image', $('#imageUpload')[0].files[0]);
+
+            $.ajax({
+                url: '',
+                type: 'POST',
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function(response) {
+                    var img_str = 'data:image/jpeg;base64,' + response.classified_image;
+                    $('#classifiedImage').attr('src', img_str);
+                    $('#classifiedImage').show();
+                },
+                error: function(response) {
+                    alert('Error running inference');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
