@@ -7,19 +7,30 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
-    <div style="display: flex; flex-direction: row; justify-content: space-around;">
-        <div style="flex: 1; text-align: center;">
-            <h2>Upload Image</h2>
-            <input type="file" id="imageUpload" accept="image/*">
-            <br>
-            <img id="uploadedImage" src="#" alt="Uploaded Image" style="max-width: 100%; display: none;">
+    <div class="row">
+        <div style="display: flex; flex-direction: row; justify-content: space-around;">
+            <div style="flex: 1; text-align: center;">
+                <h2>Upload Image</h2>
+                <input type="file" id="imageUpload" accept="image/*">
+                <br>
+                <img id="uploadedImage" src="#" alt="Uploaded Image" style="max-width: 100%; display: none;">
+            </div>
+            <div style="flex: 1; text-align: center;">
+                <h2>Classified Image</h2>
+                <button id="runInference">Run Inference</button>
+                <br>
+                <img id="classifiedImage" src="#" alt="Classified Image" style="max-width: 100%; display: none;">
+            </div>
         </div>
-        <div style="flex: 1; text-align: center;">
-            <h2>Classified Image</h2>
-            <button id="runInference">Run Inference</button>
-            <br>
-            <img id="classifiedImage" src="#" alt="Classified Image" style="max-width: 100%; display: none;">
-        </div>
+    </div>
+
+    <div style="flex: 1; text-align: center;">
+        <button id="openChatbot">Open Chatbot</button>
+    </div>
+
+    <div id="chat-window">
+    </div>
+    <div id="options">
     </div>
 
     <script>
@@ -52,6 +63,88 @@
                 }
             });
         });
+
+        $("#openChatbot").click(function() {
+            // Call a function to initiate the chatbot with inference result
+            openChatbot(inferenceResult);
+        });
+
+        function openChatbot(inferenceResult) {
+            // ... (existing logic for determining punch label and defense options)
+
+            const chatWindow = document.getElementById('chat-window');
+            const optionsDiv = document.getElementById('options');
+
+            // Function to append a message to the chat window
+            function appendMessage(message) {
+                const messageElement = document.createElement('div');
+                messageElement.textContent = message;
+                chatWindow.appendChild(messageElement);
+            }
+
+            // Initial chatbot message
+            appendMessage("The punch detected is: " + punchLabel);
+
+            // Display defense options
+            optionsDiv.innerHTML = "";
+            defenseOptions.forEach(option => {
+                const button = document.createElement('button');
+                button.textContent = option;
+                button.onclick = () => {
+                // Handle user choice
+                appendMessage("You chose: " + option);
+                // Provide feedback based on user choice
+                appendMessage(defenseFeedback);
+                // ... (logic for next question or ending the conversation)
+                };
+                optionsDiv.appendChild(button);
+            });
+            }
+
+
+        // function openChatbot(inferenceResult) {
+        // // 1. Parse the inference result to get the classified punch label
+        // const punchLabel = inferenceResult.classified_punch; // Assuming 'classified_punch' is the key in the response
+
+        // // 2. Define defense options based on the punchLabel
+        // let defenseOptions;
+        // switch (punchLabel) {
+        //     case "jab":
+        //     defenseOptions = ["block", "parry", "slip"];
+        //     break;
+        //     case "cross":
+        //     defenseOptions = ["block", "deflection and move to the side", "lean back"];
+        //     break;
+        //     // ... add options for other punches
+        //     default:
+        //     defenseOptions = ["I couldn't detect the punch clearly"];
+        // }
+
+        // // 3. Prompt user for defense selection using a modal or alert
+        // let userDefense = prompt(`The punch detected is: ${punchLabel}. Choose your defense: \n  - ${defenseOptions.join("\n  - ")}`);
+
+        // // 4. Provide feedback on defense efficiency (basic for now)
+        // let defenseFeedback;
+        // switch (userDefense) {
+        //     case "block":
+        //     case "parry":
+        //     defenseFeedback = "Good choice! Blocking or parrying are effective defenses against jabs and crosses.";
+        //     break;
+        //     case "deflection and move to the side":
+        //     case "slip":
+        //     defenseFeedback = "These are also good options for some punches, but blocking or parrying might be more efficient for crosses.";
+        //     break;
+        //     default:
+        //     defenseFeedback = userDefense === null ? "No defense selected." : "Let's try a more suitable defense next time.";
+        // }
+        // alert(defenseFeedback);
+
+        // // 5. (Optional) Prompt user for counter punch selection (similar to defense selection)
+        // // ... add logic for counter punch selection and feedback
+
+        // // 6. End conversation
+        // alert("Thanks for using the boxing knowledge tester!");
+        // }
     </script>
 </body>
 </html>
