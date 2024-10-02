@@ -8,6 +8,8 @@ opencv-python = "*"
 ultralytics = "*"
 inference-sdk = "*"
 pillow = "*"
+inference = "*"
+roboflow = "*"
 
 [dev-packages]
 ipykernel = "*"
