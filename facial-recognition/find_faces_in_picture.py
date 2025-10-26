@@ -5,7 +5,7 @@ from PIL import Image
 import face_recognition
 
 # Load the jpg file into a numpy array
-image = face_recognition.load_image_file("two_people.jpg")
+image = face_recognition.load_image_file("images/two_people.jpg")
 
 # Find all the faces in the image using the default HOG-based model.
 # This method is fairly accurate, but not as accurate as the CNN model and not GPU accelerated.
